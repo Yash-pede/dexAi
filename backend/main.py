@@ -2,8 +2,17 @@
 
 from fastapi import FastAPI
 from app.routes.job import router as job_router
+from fastapi.middleware.cors import CORSMiddleware # type: ignore
 
 app = FastAPI(title="Job API")
+origins = ['*']
+app.add_middleware(
+CORSMiddleware,
+allow_origins=origins,
+allow_credentials=True,
+allow_methods=["*"],
+allow_headers=["*"],
+)
 
 # Include job routes
 app.include_router(job_router, prefix="/api/jobs", tags=["Jobs"])
