@@ -1,8 +1,7 @@
-# backend/main.py
 
 from fastapi import FastAPI
 from app.routes.job import router as job_router
-from fastapi.middleware.cors import CORSMiddleware # type: ignore
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Job API")
 origins = ['*']
@@ -14,7 +13,6 @@ allow_methods=["*"],
 allow_headers=["*"],
 )
 
-# Include job routes
 app.include_router(job_router, prefix="/api/jobs", tags=["Jobs"])
 
 if __name__ == "__main__":

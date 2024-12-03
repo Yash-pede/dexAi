@@ -17,14 +17,14 @@ def extract_max_pages(soup: BeautifulSoup) -> int:
     pagination_nav = soup.find("nav", attrs={"aria-label": "Pagination Navigation"})
 
     if not pagination_nav:
-        return 1  # If no pagination is found, assume a single page.
+        return 1 
 
-    # Find all <li> elements inside the <ul> for pagination
+
     pagination_list = pagination_nav.find("ul")
     if not pagination_list:
         return 1
 
-    # Extract page numbers from <li> elements
+
     page_numbers = []
     for li in pagination_list.find_all("li"):
         link = li.find("a", attrs={"aria-label": True})
@@ -49,10 +49,10 @@ def extract_job_cards(url: str, page: int) -> Tuple[List[JobResult], int]:
 
         soup = BeautifulSoup(response.text, "html.parser")
 
-        # Get maximum pages from pagination
+    
         max_pages = extract_max_pages(soup)
 
-        # Scrape job data
+    
         job_data = []
         job_cards = soup.find_all("div", class_="mb-6 w-full rounded border border-gray-400 bg-white")
 
@@ -94,7 +94,7 @@ def extract_job_cards(url: str, page: int) -> Tuple[List[JobResult], int]:
 
             job_data.append(job_info)
 
-        # Calculate pages left
+    
         pages_left = max_pages - page
 
         return job_data, pages_left

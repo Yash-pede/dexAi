@@ -3,7 +3,7 @@ export type JobDetailsType ={
   job_type: string;
   job_details: string[];
   job_time: string;
-  Job_link: string;
+  job_link: string;
 }
 export type JobDataType ={
   job_title: string;

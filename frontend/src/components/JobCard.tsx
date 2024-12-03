@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Card,
   CardContent,
@@ -7,22 +6,22 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { JobDataType } from "@/lib/types";
-import { Building2, MoveDown } from "lucide-react";
+import { Building2, Loader, MoveDown } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Skeleton } from "./ui/skeleton";
+
 const JobCard = ({
   jobs,
-  pageCount,
-  setPageCount,
   pageLeft,
   loading,
+  fetchNextPage,
 }: {
   jobs: JobDataType[];
   pageCount: number;
-  setPageCount: React.Dispatch<React.SetStateAction<number>>;
   pageLeft: boolean;
   loading: boolean;
+  fetchNextPage: () => void;
 }) => {
   return (
     <div className="flex w-full flex-col gap-4">
@@ -75,8 +74,9 @@ const JobCard = ({
       ))}
       {loading && <Skeleton className="w-full h-40" />}
       <div hidden={!pageLeft} className="w-full grid place-items-center">
-        <Button onClick={() => setPageCount(pageCount + 1)}>
-          <MoveDown /> Load more
+        <Button disabled={loading} onClick={fetchNextPage}>
+          {loading ? <Loader className="animate-spin" /> : <MoveDown />} Load
+          more
         </Button>
       </div>
     </div>

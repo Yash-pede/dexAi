@@ -1,4 +1,3 @@
-# backend/app/routes/job.py
 
 from typing import Optional
 from fastapi import APIRouter, HTTPException, Query
