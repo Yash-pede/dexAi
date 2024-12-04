@@ -2,9 +2,14 @@ from fastapi import HTTPException
 import requests
 from bs4 import BeautifulSoup
 from typing import List
-from app.schema.job import JobResult
-from typing import Tuple
-import os
+from app.schema.job import JobResult, JobDetails
+
+
+from fastapi import HTTPException
+import requests
+from bs4 import BeautifulSoup
+from typing import List, Tuple
+from app.schema.job import JobResult, JobDetails
 
 
 def extract_max_pages(soup: BeautifulSoup) -> int:
@@ -37,27 +42,21 @@ def extract_max_pages(soup: BeautifulSoup) -> int:
 
 def extract_job_cards(url: str, page: int) -> Tuple[List[JobResult], int]:
     """Extract job cards from the given URL and calculate max pages."""
+    headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://wellfound.com/",
+    }
 
-    scrapeUrl = url + (f"?page={page}" if page > 1 else "")
-    response = requests.get(
-        scrapeUrl,
-    )
+    response = requests.get(url + (f"?page={page}" if page > 1 else ""), headers=headers)
 
-    # Print result page to stdout
-    print(response.url)
-    print(response.status_code)
-
-    # Save returned HTML to result.html file
-    with open('result.html', 'w') as f:
-        f.write(response.text)
-        
+    # response = requests.get(url + (f"?page={page}" if page > 1 else ""))
     try:
         if response.status_code != 200:
             raise Exception(f"Failed to retrieve the page. Status code: {response.status_code}")
 
         soup = BeautifulSoup(response.text, "html.parser")
-        with open('result.html', 'w') as f:
-            f.write(response.text)
+
     
         max_pages = extract_max_pages(soup)
 
@@ -171,4 +170,3 @@ def get_job_roles() -> List[str]:
 
     roles_data = [{"value": role, "label": role.replace("-", " ")} for role in roles]
     return roles_data
-
