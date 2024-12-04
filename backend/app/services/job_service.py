@@ -37,24 +37,10 @@ def extract_max_pages(soup: BeautifulSoup) -> int:
 
 def extract_job_cards(url: str, page: int) -> Tuple[List[JobResult], int]:
     """Extract job cards from the given URL and calculate max pages."""
-    USERNAME = os.getenv("OXYLAB_USERNAME")
-    PASSWORD = os.getenv("OXYLAB_PASSWORD")
 
-    if not USERNAME or not PASSWORD:
-        raise EnvironmentError("OXYLAB_USERNAME or OXYLAB_PASSWORD is not set in the environment variables.")
-
-
-    # Define proxy dict.
-    proxies = {
-    'http': f'http://{USERNAME}:{PASSWORD}@unblock.oxylabs.io:60000',
-    'https': f'https://{USERNAME}:{PASSWORD}@unblock.oxylabs.io:60000',
-    }
     scrapeUrl = url + (f"?page={page}" if page > 1 else "")
-    response = requests.request(
-        'GET',
+    response = requests.get(
         scrapeUrl,
-        verify=False,  # Ignore the SSL certificate
-        proxies=proxies,
     )
 
     # Print result page to stdout
