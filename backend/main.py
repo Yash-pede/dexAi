@@ -2,6 +2,9 @@
 from fastapi import FastAPI
 from app.routes.job import router as job_router
 from fastapi.middleware.cors import CORSMiddleware
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI(title="Job API")
 origins = ['*']

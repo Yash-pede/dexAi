@@ -2,14 +2,9 @@ from fastapi import HTTPException
 import requests
 from bs4 import BeautifulSoup
 from typing import List
-from app.schema.job import JobResult, JobDetails
-
-
-from fastapi import HTTPException
-import requests
-from bs4 import BeautifulSoup
-from typing import List, Tuple
-from app.schema.job import JobResult, JobDetails
+from app.schema.job import JobResult
+from typing import Tuple
+import os
 
 
 def extract_max_pages(soup: BeautifulSoup) -> int:
@@ -42,13 +37,41 @@ def extract_max_pages(soup: BeautifulSoup) -> int:
 
 def extract_job_cards(url: str, page: int) -> Tuple[List[JobResult], int]:
     """Extract job cards from the given URL and calculate max pages."""
-    response = requests.get(url + (f"?page={page}" if page > 1 else ""))
+    USERNAME = os.getenv("OXYLAB_USERNAME")
+    PASSWORD = os.getenv("OXYLAB_PASSWORD")
+
+    if not USERNAME or not PASSWORD:
+        raise EnvironmentError("OXYLAB_USERNAME or OXYLAB_PASSWORD is not set in the environment variables.")
+
+
+    # Define proxy dict.
+    proxies = {
+    'http': f'http://{USERNAME}:{PASSWORD}@unblock.oxylabs.io:60000',
+    'https': f'https://{USERNAME}:{PASSWORD}@unblock.oxylabs.io:60000',
+    }
+    scrapeUrl = url + (f"?page={page}" if page > 1 else "")
+    response = requests.request(
+        'GET',
+        scrapeUrl,
+        verify=False,  # Ignore the SSL certificate
+        proxies=proxies,
+    )
+
+    # Print result page to stdout
+    print(response.url)
+    print(response.status_code)
+
+    # Save returned HTML to result.html file
+    with open('result.html', 'w') as f:
+        f.write(response.text)
+        
     try:
         if response.status_code != 200:
             raise Exception(f"Failed to retrieve the page. Status code: {response.status_code}")
 
         soup = BeautifulSoup(response.text, "html.parser")
-
+        with open('result.html', 'w') as f:
+            f.write(response.text)
     
         max_pages = extract_max_pages(soup)
 
