@@ -1,13 +1,6 @@
 from fastapi import HTTPException
 import requests
 from bs4 import BeautifulSoup
-from typing import List
-from app.schema.job import JobResult, JobDetails
-
-
-from fastapi import HTTPException
-import requests
-from bs4 import BeautifulSoup
 from typing import List, Tuple
 from app.schema.job import JobResult, JobDetails
 

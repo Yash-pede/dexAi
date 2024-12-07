@@ -1,22 +1,25 @@
-
 from fastapi import FastAPI
-from app.routes.job import router as job_router
+from app.routes.messages import router as messages_router
+from app.routes.job import router as jobs_router
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
 load_dotenv()
 
-app = FastAPI(title="Job API")
-origins = ['*']
+app = FastAPI(title="Job and Message API")
+
+origins = ["*"]
 app.add_middleware(
-CORSMiddleware,
-allow_origins=origins,
-allow_credentials=True,
-allow_methods=["*"],
-allow_headers=["*"],
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-app.include_router(job_router, prefix="/api/jobs", tags=["Jobs"])
+# Include routers
+app.include_router(messages_router, prefix="/api/messages", tags=["Messages"])
+app.include_router(jobs_router, prefix="/api/jobs", tags=["Jobs"])
 
 if __name__ == "__main__":
     import uvicorn

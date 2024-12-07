@@ -10,9 +10,9 @@ import {
   Workflow,
 } from "lucide-react"
 
-import { NavMain } from "@/components/nav-main"
+import { NavMain } from "@/components/layout/nav-main"
 import { NavSecondary } from "./nav-secondary"
-import { NavUser } from "@/components/nav-user"
+import { NavUser } from "@/components/layout/nav-user"
 import {
   Sidebar,
   SidebarContent,
@@ -23,10 +23,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 
+const userData: { email: string; password: string } | unknown =
+localStorage.getItem("user");
+
 const data = {
   user: {
     name: "Jhon",
-    email: "m@example.com",
+    email: userData?.email ?? "m@example.com",
     avatar: "/avatars/shadcn.jpg",
   },
   navMain: [
