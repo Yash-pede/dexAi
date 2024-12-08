@@ -30,7 +30,6 @@ class SendMessageRequest(BaseModel):
 async def get_user_login(request: LoginRequest):
     """Login to the website."""
     try:
-        # Pass email and password from the request body to the userLogin function
         result = await userLogin(email=request.email, password=request.password, browser=browser)
         return result
     except HTTPException as http_err:

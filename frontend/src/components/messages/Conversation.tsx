@@ -124,7 +124,7 @@ const Conversation = () => {
                   <Skeleton key={idx} className="w-full h-20" />
                 ))
               ) : conversation && conversation.messages.length > 0 ? (
-                conversation.messages.map((message, idx: number) => {
+                conversation.messages.map((message :any, idx: number) => {
                   console.log(message.sender);
                   return (
                     <div
